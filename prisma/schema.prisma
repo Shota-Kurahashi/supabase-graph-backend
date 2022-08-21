@@ -10,6 +10,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+generator nestgraphql {
+    //v15.1.1以上の場合は"prisma-nestjs-graphql"のみでokです
+    provider = "prisma-nestjs-graphql"
+    output = "../src/@generated/prisma-nestjs-graphql"
+}
+
 model User {
   id          String @id @default(uuid())
   createdAt DateTime @default(now())
@@ -38,7 +44,7 @@ model Post {
   id          String @id @default(uuid())
   ipAdress Float?
   user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId      String? @unique 
+  userId      String?  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   authorRole Role @default(ANONYMOUS)
@@ -59,11 +65,11 @@ model Comment {
   id          String @id @default(uuid())
   ipAdress Float?
   user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId      String? @unique 
+  userId      String?  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
-  postId      String @unique 
+  postId      String  
   authorRole Role @default(ANONYMOUS)
   content     String @db.VarChar(255)
   likes String[]
