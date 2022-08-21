@@ -43,8 +43,8 @@ model Post {
   updatedAt DateTime @updatedAt
   authorRole Role @default(ANONYMOUS)
   authorName String @db.VarChar(30)
-  startTime   DateTime
-  airtime DateTime
+  startTime   DateTime @default(now())
+  airtime DateTime @default(now())
   title       String @db.VarChar(50)
   episode    Int?
   category    Category @default(Unknown)

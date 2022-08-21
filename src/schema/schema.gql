@@ -1,0 +1,32 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Post {
+  episode: Int
+  id: String!
+  userId: String
+  ipAdress: Float
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  authorRole: String!
+  authorName: String!
+  startTime: DateTime!
+  airtime: DateTime!
+  title: String!
+  category: String!
+  content: String
+  participant: [String!]!
+  keeped: [String!]!
+  public: Boolean!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Query {
+  getPosts: [Post!]!
+  getPost: Post!
+}
