@@ -2,23 +2,21 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Post {
-  episode: Int
-  id: String!
-  userId: String
+type Comment {
+  id: ID!
   ipAdress: Float
+  user: User
+  userId: String
   createdAt: DateTime!
   updatedAt: DateTime!
-  authorRole: String!
-  authorName: String!
-  startTime: DateTime!
-  airtime: DateTime!
-  title: String!
-  category: String!
-  content: String
-  participant: [String!]!
-  keeped: [String!]!
-  public: Boolean!
+  post: Post!
+  postId: String!
+  authorRole: Role!
+  content: String!
+  likes: [String!]
+  unLiked: [String!]
+  spoiler: Boolean!
+  spoilers: [String!]
 }
 
 """
@@ -26,7 +24,181 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+enum Role {
+  ANONYMOUS
+  AUTHENTICATED
+}
+
+type PostCount {
+  comments: Int!
+}
+
+type Post {
+  id: ID!
+  ipAdress: Float
+  user: User
+  userId: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  authorRole: Role!
+  authorName: String!
+  startTime: DateTime!
+  airtime: DateTime!
+  title: String!
+  episode: Int
+  category: Category!
+  content: String
+  participant: [String!]
+  comments: [Comment!]
+  keeped: [String!]
+  public: Boolean!
+  _count: PostCount!
+}
+
+enum Category {
+  Anime
+  Drama
+  DramaMovie
+  AnimeMovie
+  TV
+  Music
+  Unknown
+}
+
+type Profile {
+  id: ID!
+  user: User!
+  userId: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  favorite: [String!]
+  twitterId: String
+  img: String
+  username: String
+}
+
+type UserCount {
+  posts: Int!
+  comments: Int!
+}
+
+type User {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  posts: [Post!]
+  comments: [Comment!]
+  keepPost: [String!]
+  profile: Profile
+  follow: [String!]
+  eachOtherFollow: [String!]
+  _count: UserCount!
+}
+
+type Auth {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
 type Query {
-  getPosts: [Post!]!
-  getPost: Post!
+  users: [User!]!
+  user(id: String!): User!
+  auth(id: Int!): Auth!
+  posts: [Post!]!
+  post(id: String!): Post!
+  comments: [Comment!]!
+  comment(id: Int!): Comment!
+  profiles: [Profile!]!
+  profile(id: Int!): Profile!
+}
+
+type Mutation {
+  createUser(createUserInput: CreateUserInput!): User!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+  removeUser(id: String!): User!
+  createAuth(createAuthInput: CreateAuthInput!): Auth!
+  updateAuth(updateAuthInput: UpdateAuthInput!): Auth!
+  removeAuth(id: Int!): Auth!
+  createPost(createPostInput: CreatePostInput!): Post!
+  updatePost(updatePostInput: UpdatePostInput!): Post!
+  removePost(id: String!, userId: String!): Post!
+  createComment(createCommentInput: CreateCommentInput!): Comment!
+  updateComment(updateCommentInput: UpdateCommentInput!): Comment!
+  removeComment(id: Int!): Comment!
+  createProfile(createProfileInput: CreateProfileInput!): Profile!
+  updateProfile(updateProfileInput: UpdateProfileInput!): Profile!
+  removeProfile(id: Int!): Profile!
+}
+
+input CreateUserInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateUserInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateAuthInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateAuthInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreatePostInput {
+  ipAdress: Float
+  userId: String
+  authorRole: Role
+  authorName: String!
+  startTime: DateTime
+  airtime: DateTime
+  title: String!
+  episode: Int
+  category: Category
+  content: String
+  public: Boolean
+}
+
+input UpdatePostInput {
+  ipAdress: Float
+  userId: String
+  authorRole: Role
+  authorName: String
+  startTime: DateTime
+  airtime: DateTime
+  title: String
+  episode: Int
+  category: Category
+  content: String
+  public: Boolean
+  id: ID!
+}
+
+input CreateCommentInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateCommentInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateProfileInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateProfileInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
 }
