@@ -1,0 +1,89 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  posts Post[]
+  comments Comment[]
+  keepPost String[] 
+  profile Profile?
+  follow String[]
+  eachOtherFollow String[]
+}
+
+model Profile {
+  id          String @id @default(uuid())
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String @unique 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  favorite String[]
+  twitterId String?
+  img String?
+  username String?
+}
+
+model Post {
+  id          String @id @default(uuid())
+  ipAdress Float?
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String? @unique 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  authorRole Role @default(ANONYMOUS)
+  authorName String @db.VarChar(30)
+  startTime   DateTime
+  airtime DateTime
+  title       String @db.VarChar(50)
+  episode    Int?
+  category    Category @default(Unknown)
+  content     String?
+  participant String[]
+  comments Comment[]
+  keeped String[]
+  public Boolean @default(true)
+}
+
+model Comment {
+  id          String @id @default(uuid())
+  ipAdress Float?
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String? @unique 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId      String @unique 
+  authorRole Role @default(ANONYMOUS)
+  content     String @db.VarChar(255)
+  likes String[]
+  unLiked String[]
+  spoiler Boolean @default(false)
+  spoilers String[]
+}
+
+enum Role {
+  ANONYMOUS
+  AUTHENTICATED
+}
+
+enum Category {
+  Anime
+  Drama
+  DramaMovie
+  AnimeMovie
+  TV
+  Music
+  Unknown
+}
+
