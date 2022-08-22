@@ -1,5 +1,5 @@
 import { CreateProfileInput } from './create-profile.input';
-import { InputType, Field, Int, PartialType } from '@nestjs/graphql';
+import { InputType, Field, PartialType } from '@nestjs/graphql';
 import { ProfileCreatefavoriteInput } from 'src/@generated/prisma-nestjs-graphql/profile/profile-createfavorite.input';
 import { IsNotEmpty, IsOptional, IsUrl } from 'class-validator';
 
