@@ -1,26 +1,39 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateProfileInput } from './dto/create-profile.input';
 import { UpdateProfileInput } from './dto/update-profile.input';
 
 @Injectable()
 export class ProfilesService {
+  constructor(private readonly prisma: PrismaService) {}
   create(createProfileInput: CreateProfileInput) {
-    return 'This action adds a new profile';
+    return this.prisma.profile.create({
+      data: {
+        ...createProfileInput,
+      },
+    });
   }
 
-  findAll() {
-    return `This action returns all profiles`;
+  findOne(userId: string) {
+    return this.prisma.profile.findUnique({
+      where: { userId },
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} profile`;
-  }
+  async update(userId: string, updateProfileInput: UpdateProfileInput) {
+    const profile = await this.prisma.profile.findUnique({
+      where: { userId },
+    });
 
-  update(id: number, updateProfileInput: UpdateProfileInput) {
-    return `This action updates a #${id} profile`;
-  }
+    if (!profile || profile.userId !== userId) {
+      throw new ForbiddenException('No permision to update');
+    }
 
-  remove(id: number) {
-    return `This action removes a #${id} profile`;
+    return this.prisma.profile.update({
+      where: { userId },
+      data: {
+        ...updateProfileInput,
+      },
+    });
   }
 }

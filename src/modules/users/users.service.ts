@@ -1,20 +1,23 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateUserInput } from './dto/create-user.input';
-import { UpdateUserInput } from './dto/update-user.input';
 
 @Injectable()
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(createUserInput: CreateUserInput) {
-    return 'This action adds a new user';
+  create(id: string) {
+    return this.prisma.user.create({
+      data: {
+        id,
+      },
+    });
   }
 
   findAll() {
     return this.prisma.user.findMany({
       take: 100,
       include: {
+        profile: true,
         posts: {
           include: {
             comments: true,
@@ -37,6 +40,7 @@ export class UsersService {
         id,
       },
       include: {
+        profile: true,
         posts: {
           include: {
             comments: true,
@@ -50,11 +54,24 @@ export class UsersService {
     });
   }
 
-  update(id: number, updateUserInput: UpdateUserInput) {
-    return `This action updates a #${id} user`;
-  }
+  async remove(id: string) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
+    if (!user || user.id !== id) {
+      throw new ForbiddenException('No permision to delete');
+    }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+    //本番ではtrueにするだけ
+    return this.prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        deleted: true,
+      },
+    });
   }
 }

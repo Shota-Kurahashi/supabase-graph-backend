@@ -92,64 +92,29 @@ type User {
   profile: Profile
   follow: [String!]
   eachOtherFollow: [String!]
+  deleted: Boolean!
   _count: UserCount!
-}
-
-type Auth {
-  """Example field (placeholder)"""
-  exampleField: Int!
 }
 
 type Query {
   users: [User!]!
   user(id: String!): User!
-  auth(id: Int!): Auth!
   posts: [Post!]!
   post(id: String!): Post!
-  comments: [Comment!]!
-  comment(id: Int!): Comment!
-  profiles: [Profile!]!
-  profile(id: Int!): Profile!
+  postsByUserId(userId: String!): [Post!]!
+  comments(postId: String!): [Comment!]!
+  profile(userId: String!): Profile!
 }
 
 type Mutation {
-  createUser(createUserInput: CreateUserInput!): User!
-  updateUser(updateUserInput: UpdateUserInput!): User!
+  createUser(id: String!): User!
   removeUser(id: String!): User!
-  createAuth(createAuthInput: CreateAuthInput!): Auth!
-  updateAuth(updateAuthInput: UpdateAuthInput!): Auth!
-  removeAuth(id: Int!): Auth!
   createPost(createPostInput: CreatePostInput!): Post!
   updatePost(updatePostInput: UpdatePostInput!): Post!
   removePost(id: String!, userId: String!): Post!
   createComment(createCommentInput: CreateCommentInput!): Comment!
-  updateComment(updateCommentInput: UpdateCommentInput!): Comment!
-  removeComment(id: Int!): Comment!
   createProfile(createProfileInput: CreateProfileInput!): Profile!
   updateProfile(updateProfileInput: UpdateProfileInput!): Profile!
-  removeProfile(id: Int!): Profile!
-}
-
-input CreateUserInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
-input UpdateUserInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
-}
-
-input CreateAuthInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
-input UpdateAuthInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
 }
 
 input CreatePostInput {
@@ -182,23 +147,45 @@ input UpdatePostInput {
 }
 
 input CreateCommentInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  ipAdress: Float
+  userId: String
+  postId: String!
+  authorRole: Role
+  content: String!
+  likes: CommentCreatelikesInput
+  unLiked: CommentCreateunLikedInput
+  spoiler: Boolean
+  spoilers: CommentCreatespoilersInput
 }
 
-input UpdateCommentInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+input CommentCreatelikesInput {
+  set: [String!]!
+}
+
+input CommentCreateunLikedInput {
+  set: [String!]!
+}
+
+input CommentCreatespoilersInput {
+  set: [String!]!
 }
 
 input CreateProfileInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  userId: String!
+  favorite: ProfileCreatefavoriteInput
+  twitterId: String
+  img: String
+  username: String
+}
+
+input ProfileCreatefavoriteInput {
+  set: [String!]!
 }
 
 input UpdateProfileInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+  userId: String!
+  favorite: ProfileCreatefavoriteInput
+  twitterId: String
+  img: String
+  username: String
 }

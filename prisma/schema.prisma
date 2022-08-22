@@ -17,7 +17,7 @@ generator nestgraphql {
 }
 
 model User {
-  id          String @id @default(uuid())
+  id          String @id 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   posts Post[]
@@ -26,6 +26,7 @@ model User {
   profile Profile?
   follow String[]
   eachOtherFollow String[]
+  deleted Boolean @default(false)
 }
 
 model Profile {

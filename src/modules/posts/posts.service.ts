@@ -39,6 +39,22 @@ export class PostsService {
     });
   }
 
+  findUserPosts(userId: string) {
+    return this.prisma.post.findMany({
+      take: 100,
+      where: {
+        userId,
+      },
+      include: {
+        comments: true,
+        _count: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+  }
+
   async update(userId: string, id: string, updatePostInput: UpdatePostInput) {
     const post = await this.prisma.post.findUnique({
       where: {

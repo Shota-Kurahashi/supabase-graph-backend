@@ -35,6 +35,9 @@ export class User {
   @Field(() => [String], { nullable: true })
   eachOtherFollow!: Array<string>;
 
+  @Field(() => Boolean, { nullable: false, defaultValue: false })
+  deleted!: boolean;
+
   @Field(() => UserCount, { nullable: false })
   _count?: UserCount;
 }
