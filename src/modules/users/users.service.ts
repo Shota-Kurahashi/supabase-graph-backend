@@ -1,4 +1,5 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UserUpdatefollowInput } from './dto/user-updatefollow.input';
 
@@ -6,12 +7,22 @@ import { UserUpdatefollowInput } from './dto/user-updatefollow.input';
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(id: string) {
-    return this.prisma.user.create({
-      data: {
-        id,
-      },
-    });
+  async create(id: string) {
+    try {
+      const user = await this.prisma.user.create({
+        data: {
+          id,
+        },
+      });
+      return user;
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        if (error.code === 'P2002') {
+          throw new ForbiddenException('すでに登録されています');
+        }
+      }
+      throw error;
+    }
   }
 
   findAll() {

@@ -98,7 +98,7 @@ type User {
 
 type Query {
   users: [User!]!
-  user(userId: UserInput!): User!
+  user(userInput: UserInput!): User!
   posts: [Post!]!
   post(id: String!): Post!
   postsByUserId(userId: String!): [Post!]!
@@ -113,8 +113,8 @@ input UserInput {
 }
 
 type Mutation {
-  createUser(userId: UserInput!): User!
-  removeUser(userId: UserInput!): User!
+  createUser(userInput: UserInput!): User!
+  removeUser(userInput: UserInput!): User!
   follow(userUpdatefollowInput: UserUpdatefollowInput!): User!
   createPost(createPostInput: CreatePostInput!): Post!
   updatePost(updatePostInput: UpdatePostInput!): Post!
