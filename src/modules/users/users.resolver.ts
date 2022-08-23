@@ -2,14 +2,16 @@ import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
 import { UserUpdatefollowInput } from './dto/user-updatefollow.input';
+import { IsUUID } from 'class-validator';
+import { UserInput } from './dto/user-InputUserId.input';
 
 @Resolver(() => User)
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 
   @Mutation(() => User)
-  createUser(@Args('id') id: string) {
-    return this.usersService.create(id);
+  createUser(@Args('userId') UserInput: UserInput) {
+    return this.usersService.create(UserInput.userId);
   }
 
   @Query(() => [User], { name: 'users' })
@@ -18,13 +20,13 @@ export class UsersResolver {
   }
 
   @Query(() => User, { name: 'user' })
-  findOne(@Args('id', { type: () => String }) id: string) {
-    return this.usersService.findOne(id);
+  findOne(@Args('userId') UserInput: UserInput) {
+    return this.usersService.findOne(UserInput.userId);
   }
 
   @Mutation(() => User)
-  removeUser(@Args('id', { type: () => String }) id: string) {
-    return this.usersService.remove(id);
+  removeUser(@Args('userId') UserInput: UserInput) {
+    return this.usersService.remove(UserInput.userId);
   }
 
   @Mutation(() => User, { name: 'follow' })

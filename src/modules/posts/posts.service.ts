@@ -134,8 +134,12 @@ export class PostsService {
         id: postUpdatekeepedInput.postId,
       },
     });
+
+    if (!post) {
+      throw new ForbiddenException('投稿が見つかりません');
+    }
     //すでに登録済みだったら削除
-    if (post.keeped.includes(postUpdatekeepedInput.userId)) {
+    if (post.keeped?.includes(postUpdatekeepedInput.userId)) {
       const removeKeepPost = this.prisma.post.update({
         where: {
           id: postUpdatekeepedInput.postId,
