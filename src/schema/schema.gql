@@ -91,7 +91,7 @@ type User {
   keepPost: [String!]
   profile: Profile
   follow: [String!]
-  eachOtherFollow: [String!]
+  followed: [String!]
   deleted: Boolean!
   _count: UserCount!
 }
@@ -102,6 +102,7 @@ type Query {
   posts: [Post!]!
   post(id: String!): Post!
   postsByUserId(userId: String!): [Post!]!
+  keepPosts(userId: String!): [Post!]!
   comments(postId: String!): [Comment!]!
   profile(userId: String!): Profile!
 }
@@ -109,12 +110,19 @@ type Query {
 type Mutation {
   createUser(id: String!): User!
   removeUser(id: String!): User!
+  follow(userUpdatefollowInput: UserUpdatefollowInput!): User!
   createPost(createPostInput: CreatePostInput!): Post!
   updatePost(updatePostInput: UpdatePostInput!): Post!
+  keep(UserUpdatekeepPostInput: PostUpdatekeepedInput!): Post!
   removePost(id: String!, userId: String!): Post!
   createComment(createCommentInput: CreateCommentInput!): Comment!
   createProfile(createProfileInput: CreateProfileInput!): Profile!
   updateProfile(updateProfileInput: UpdateProfileInput!): Profile!
+}
+
+input UserUpdatefollowInput {
+  userId: String!
+  followingUserId: String!
 }
 
 input CreatePostInput {
@@ -144,6 +152,11 @@ input UpdatePostInput {
   content: String
   public: Boolean
   id: ID!
+}
+
+input PostUpdatekeepedInput {
+  userId: ID!
+  postId: String
 }
 
 input CreateCommentInput {

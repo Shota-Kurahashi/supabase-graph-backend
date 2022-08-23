@@ -1,6 +1,7 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreatePostInput } from './dto/create-post.input';
+import { PostUpdatekeepedInput } from './dto/post-updatekeeped.input';
 import { UpdatePostInput } from './dto/update-post.input';
 
 @Injectable()
@@ -27,8 +28,8 @@ export class PostsService {
     });
   }
 
-  findOne(id: string) {
-    return this.prisma.post.findUnique({
+  async findOne(id: string) {
+    const post = this.prisma.post.findUnique({
       where: {
         id,
       },
@@ -37,13 +38,47 @@ export class PostsService {
         _count: true,
       },
     });
+
+    if (!post) {
+      throw new ForbiddenException('投稿が見つかりません');
+    }
+    return post;
   }
 
-  findUserPosts(userId: string) {
-    return this.prisma.post.findMany({
+  async findUserPosts(userId: string) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (!user) {
+      throw new ForbiddenException('ユーザが見つかりません');
+    }
+
+    const posts = await this.prisma.post.findMany({
       take: 100,
       where: {
         userId,
+      },
+      include: {
+        comments: true,
+        _count: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+    return posts;
+  }
+
+  findKeepPosts(userId: string) {
+    return this.prisma.post.findMany({
+      take: 100,
+      where: {
+        keeped: {
+          hasEvery: userId,
+        },
       },
       include: {
         comments: true,
@@ -71,6 +106,53 @@ export class PostsService {
         ...updatePostInput,
       },
     });
+  }
+
+  async keep(postUpdatekeepedInput: PostUpdatekeepedInput) {
+    const post = await this.prisma.post.findUnique({
+      where: {
+        id: postUpdatekeepedInput.postId,
+      },
+    });
+    //すでに登録済みだったら削除
+    if (post.keeped.includes(postUpdatekeepedInput.userId)) {
+      const removeKeepPost = this.prisma.post.update({
+        where: {
+          id: postUpdatekeepedInput.postId,
+        },
+        data: {
+          keeped: {
+            set: post.keeped.filter(
+              (userId) => userId !== postUpdatekeepedInput.userId,
+            ),
+          },
+        },
+        include: {
+          comments: true,
+          _count: true,
+        },
+      });
+
+      return removeKeepPost;
+    }
+
+    //登録済みでなければ追加
+    const addedPost = this.prisma.post.update({
+      where: {
+        id: postUpdatekeepedInput.postId,
+      },
+      data: {
+        keeped: {
+          push: postUpdatekeepedInput.userId,
+        },
+      },
+      include: {
+        comments: true,
+        _count: true,
+      },
+    });
+
+    return addedPost;
   }
 
   async remove(userId: string, id: string) {

@@ -1,6 +1,7 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
+import { UserUpdatefollowInput } from './dto/user-updatefollow.input';
 
 @Resolver(() => User)
 export class UsersResolver {
@@ -24,5 +25,12 @@ export class UsersResolver {
   @Mutation(() => User)
   removeUser(@Args('id', { type: () => String }) id: string) {
     return this.usersService.remove(id);
+  }
+
+  @Mutation(() => User, { name: 'follow' })
+  follow(
+    @Args('userUpdatefollowInput') userUpdatefollowInput: UserUpdatefollowInput,
+  ) {
+    return this.usersService.follow(userUpdatefollowInput);
   }
 }

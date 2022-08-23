@@ -33,7 +33,7 @@ export class User {
   follow!: Array<string>;
 
   @Field(() => [String], { nullable: true })
-  eachOtherFollow!: Array<string>;
+  followed!: Array<string>;
 
   @Field(() => Boolean, { nullable: false, defaultValue: false })
   deleted!: boolean;

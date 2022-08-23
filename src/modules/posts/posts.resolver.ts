@@ -3,6 +3,7 @@ import { PostsService } from './posts.service';
 import { Post } from './entities/post.entity';
 import { CreatePostInput } from './dto/create-post.input';
 import { UpdatePostInput } from './dto/update-post.input';
+import { PostUpdatekeepedInput } from './dto/post-updatekeeped.input';
 
 @Resolver(() => Post)
 export class PostsResolver {
@@ -28,6 +29,11 @@ export class PostsResolver {
     return this.postsService.findUserPosts(userId);
   }
 
+  @Query(() => [Post], { name: 'keepPosts' })
+  findKeepPosts(@Args('userId', { type: () => String }) userId: string) {
+    return this.postsService.findKeepPosts(userId);
+  }
+
   @Mutation(() => Post)
   updatePost(@Args('updatePostInput') updatePostInput: UpdatePostInput) {
     return this.postsService.update(
@@ -35,6 +41,14 @@ export class PostsResolver {
       updatePostInput.id,
       updatePostInput,
     );
+  }
+
+  @Mutation(() => Post, { name: 'keep' })
+  addKeepPost(
+    @Args('UserUpdatekeepPostInput')
+    postUpdatekeepedInput: PostUpdatekeepedInput,
+  ) {
+    return this.postsService.keep(postUpdatekeepedInput);
   }
 
   @Mutation(() => Post)

@@ -1,5 +1,6 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { UserUpdatefollowInput } from './dto/user-updatefollow.input';
 
 @Injectable()
 export class UsersService {
@@ -52,6 +53,82 @@ export class UsersService {
         },
       },
     });
+  }
+
+  async follow(userUpdatefollowInput: UserUpdatefollowInput) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: userUpdatefollowInput.userId,
+      },
+    });
+
+    const followingUser = await this.prisma.user.findUnique({
+      where: {
+        id: userUpdatefollowInput.followingUserId,
+      },
+    });
+
+    if (!user || !followingUser) {
+      throw new ForbiddenException('ユーザーが見つかりません');
+    }
+
+    if (user.id === followingUser.id) {
+      throw new ForbiddenException('自分をフォローできません');
+    }
+
+    //すでにフォロ-していたらフォロー解除
+    if (user.follow.includes(followingUser.id)) {
+      const removeFollow = await this.prisma.user.update({
+        where: {
+          id: userUpdatefollowInput.userId,
+        },
+        data: {
+          follow: {
+            set: user.follow.filter(
+              (follow) => follow !== userUpdatefollowInput.followingUserId,
+            ),
+          },
+        },
+      });
+
+      await this.prisma.user.update({
+        where: {
+          id: userUpdatefollowInput.followingUserId,
+        },
+        data: {
+          followed: {
+            set: followingUser.followed.filter(
+              (followed) => followed !== userUpdatefollowInput.userId,
+            ),
+          },
+        },
+      });
+      return removeFollow;
+    }
+
+    //フォローする
+    const follow = await this.prisma.user.update({
+      where: {
+        id: userUpdatefollowInput.userId,
+      },
+      data: {
+        follow: {
+          push: userUpdatefollowInput.followingUserId,
+        },
+      },
+    });
+
+    await this.prisma.user.update({
+      where: {
+        id: userUpdatefollowInput.followingUserId,
+      },
+      data: {
+        followed: {
+          push: userUpdatefollowInput.userId,
+        },
+      },
+    });
+    return follow;
   }
 
   async remove(id: string) {
