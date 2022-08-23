@@ -90,6 +90,26 @@ export class PostsService {
     });
   }
 
+  async findFollowAndSelfPosts(userId: string) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (!user) {
+      throw new ForbiddenException('ユーザが見つかりません');
+    }
+
+    const followerPosts = await Promise.all(
+      user.follow.map((followId) => this.findUserPosts(followId)),
+    );
+
+    const selfPosts = await this.findUserPosts(userId);
+
+    return selfPosts.concat(...followerPosts);
+  }
+
   async update(userId: string, id: string, updatePostInput: UpdatePostInput) {
     const post = await this.prisma.post.findUnique({
       where: {

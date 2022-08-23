@@ -103,6 +103,7 @@ type Query {
   post(id: String!): Post!
   postsByUserId(userId: String!): [Post!]!
   keepPosts(userId: String!): [Post!]!
+  followAndSelfPosts(userId: String!): [Post!]!
   comments(postId: String!): [Comment!]!
   profile(userId: String!): Profile!
 }

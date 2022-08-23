@@ -34,6 +34,12 @@ export class PostsResolver {
     return this.postsService.findKeepPosts(userId);
   }
 
+  @Query(() => [Post], { name: 'followAndSelfPosts' })
+  findFollowAndSelfPosts(
+    @Args('userId', { type: () => String }) userId: string,
+  ) {
+    return this.postsService.findFollowAndSelfPosts(userId);
+  }
   @Mutation(() => Post)
   updatePost(@Args('updatePostInput') updatePostInput: UpdatePostInput) {
     return this.postsService.update(
