@@ -1,6 +1,6 @@
 import { InputType, Field } from '@nestjs/graphql';
 import { IsNotEmpty, IsOptional, IsUrl } from 'class-validator';
-import { ProfileCreatefavoriteInput } from 'src/@generated/prisma-nestjs-graphql/profile/profile-createfavorite.input';
+import { ProfileCreatefavoriteInput } from '../entities/profile-createfavorite.input';
 
 @InputType()
 export class CreateProfileInput {

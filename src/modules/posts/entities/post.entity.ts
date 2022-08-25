@@ -2,13 +2,12 @@ import { Field } from '@nestjs/graphql';
 import { ObjectType } from '@nestjs/graphql';
 import { ID } from '@nestjs/graphql';
 import { Float } from '@nestjs/graphql';
-
 import { Int } from '@nestjs/graphql';
-import { PostCount } from 'src/@generated/prisma-nestjs-graphql/post/post-count.output';
-import { Category } from 'src/@generated/prisma-nestjs-graphql/prisma/category.enum';
-import { Role } from 'src/@generated/prisma-nestjs-graphql/prisma/role.enum';
 import { Comment } from 'src/modules/comments/entities/comment.entity';
 import { User } from 'src/modules/users/entities/user.entity';
+import { Category } from './category.enum';
+import { PostCount } from './post-count.output';
+import { Role } from './role.enum';
 
 @ObjectType()
 export class Post {

@@ -2,8 +2,8 @@ import { Field } from '@nestjs/graphql';
 import { ObjectType } from '@nestjs/graphql';
 import { ID } from '@nestjs/graphql';
 import { Float } from '@nestjs/graphql';
-import { Role } from 'src/@generated/prisma-nestjs-graphql/prisma/role.enum';
 import { Post } from 'src/modules/posts/entities/post.entity';
+import { Role } from 'src/modules/posts/entities/role.enum';
 import { User } from 'src/modules/users/entities/user.entity';
 
 @ObjectType()

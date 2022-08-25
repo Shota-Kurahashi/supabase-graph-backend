@@ -10,8 +10,8 @@ import {
   MaxLength,
   MinDate,
 } from 'class-validator';
-import { Category } from 'src/@generated/prisma-nestjs-graphql/prisma/category.enum';
-import { Role } from 'src/@generated/prisma-nestjs-graphql/prisma/role.enum';
+import { Category } from '../entities/category.enum';
+import { Role } from '../entities/role.enum';
 const today = new Date();
 
 @InputType()

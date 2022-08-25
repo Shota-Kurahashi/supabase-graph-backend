@@ -6,10 +6,10 @@ import {
   IsString,
   IsUUID,
 } from 'class-validator';
-import { CommentCreatelikesInput } from 'src/@generated/prisma-nestjs-graphql/comment/comment-createlikes.input';
-import { CommentCreatespoilersInput } from 'src/@generated/prisma-nestjs-graphql/comment/comment-createspoilers.input';
-import { CommentCreateunLikedInput } from 'src/@generated/prisma-nestjs-graphql/comment/comment-createun-liked.input';
-import { Role } from 'src/@generated/prisma-nestjs-graphql/prisma/role.enum';
+import { Role } from 'src/modules/posts/entities/role.enum';
+import { CommentCreatelikesInput } from '../entities/comment-createlikes.input';
+import { CommentCreatespoilersInput } from '../entities/comment-createspoilers.input';
+import { CommentCreateunLikedInput } from '../entities/comment-createun-liked.input';
 
 @InputType()
 export class CreateCommentInput {
