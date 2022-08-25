@@ -1,10 +1,10 @@
 import { Field } from '@nestjs/graphql';
 import { ObjectType } from '@nestjs/graphql';
 import { ID } from '@nestjs/graphql';
-import { UserCount } from 'src/@generated/prisma-nestjs-graphql/user/user-count.output';
 import { Comment } from 'src/modules/comments/entities/comment.entity';
 import { Post } from 'src/modules/posts/entities/post.entity';
 import { Profile } from 'src/modules/profiles/entities/profile.entity';
+import { UserCount } from './user-count.output';
 
 @ObjectType()
 export class User {
