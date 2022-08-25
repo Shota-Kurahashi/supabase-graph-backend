@@ -12,7 +12,7 @@ export class Comment {
   id!: string;
 
   @Field(() => Float, { nullable: true })
-  ipAdress!: number | null;
+  ipAddress!: number | null;
 
   @Field(() => User, { nullable: true })
   user?: User | null;

@@ -24,7 +24,7 @@ export class UpdatePostInput extends PartialType(CreatePostInput) {
   @Field(() => Float, { nullable: true })
   @IsOptional()
   @IsIP()
-  ipAdress?: number;
+  ipAddress?: number;
 
   @Field(() => String, { nullable: true })
   @IsOptional()

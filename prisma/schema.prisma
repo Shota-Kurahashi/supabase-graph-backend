@@ -42,7 +42,7 @@ model Profile {
 
 model Post {
   id          String @id @default(uuid())
-  ipAdress Float?
+  ipAddress Float?
   user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String?  
   createdAt DateTime @default(now())
@@ -63,7 +63,7 @@ model Post {
 
 model Comment {
   id          String @id @default(uuid())
-  ipAdress Float?
+  ipAddress Float?
   user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String?  
   createdAt DateTime @default(now())

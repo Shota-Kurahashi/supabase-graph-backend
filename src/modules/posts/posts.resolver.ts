@@ -51,7 +51,7 @@ export class PostsResolver {
 
   @Mutation(() => Post, { name: 'keep' })
   addKeepPost(
-    @Args('UserUpdatekeepPostInput')
+    @Args('postUpdatekeepedInput')
     postUpdatekeepedInput: PostUpdatekeepedInput,
   ) {
     return this.postsService.keep(postUpdatekeepedInput);

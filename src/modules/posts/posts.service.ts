@@ -85,7 +85,7 @@ export class PostsService {
         _count: true,
       },
       orderBy: {
-        createdAt: 'desc',
+        updatedAt: 'desc',
       },
     });
   }

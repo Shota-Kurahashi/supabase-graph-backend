@@ -9,7 +9,7 @@ export class PostUpdatekeepedInput {
   @IsUUID()
   userId!: string;
 
-  @Field(() => String, { nullable: true })
+  @Field(() => String, { nullable: false })
   @IsNotEmpty()
   @IsUUID()
   postId!: string;

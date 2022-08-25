@@ -15,7 +15,7 @@ import { Role } from 'src/@generated/prisma-nestjs-graphql/prisma/role.enum';
 export class CreateCommentInput {
   @Field(() => Float, { nullable: true })
   @IsOptional()
-  ipAdress?: number;
+  ipAddress?: number;
 
   @Field(() => String, { nullable: true })
   @IsOptional()
