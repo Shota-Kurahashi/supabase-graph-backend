@@ -9,9 +9,9 @@ CREATE TABLE "User" (
     "id" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "keepPost" TEXT[],
     "follow" TEXT[],
-    "eachOtherFollow" TEXT[],
+    "followed" TEXT[],
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -33,14 +33,14 @@ CREATE TABLE "Profile" (
 -- CreateTable
 CREATE TABLE "Post" (
     "id" TEXT NOT NULL,
-    "ipAdress" DOUBLE PRECISION,
+    "ipAddress" DOUBLE PRECISION,
     "userId" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "authorRole" "Role" NOT NULL DEFAULT 'ANONYMOUS',
     "authorName" VARCHAR(30) NOT NULL,
-    "startTime" TIMESTAMP(3) NOT NULL,
-    "airtime" TIMESTAMP(3) NOT NULL,
+    "startTime" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "airtime" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "title" VARCHAR(50) NOT NULL,
     "episode" INTEGER,
     "category" "Category" NOT NULL DEFAULT 'Unknown',
@@ -55,7 +55,7 @@ CREATE TABLE "Post" (
 -- CreateTable
 CREATE TABLE "Comment" (
     "id" TEXT NOT NULL,
-    "ipAdress" DOUBLE PRECISION,
+    "ipAddress" DOUBLE PRECISION,
     "userId" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -72,15 +72,6 @@ CREATE TABLE "Comment" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Profile_userId_key" ON "Profile"("userId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Post_userId_key" ON "Post"("userId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Comment_userId_key" ON "Comment"("userId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Comment_postId_key" ON "Comment"("postId");
 
 -- AddForeignKey
 ALTER TABLE "Profile" ADD CONSTRAINT "Profile_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
