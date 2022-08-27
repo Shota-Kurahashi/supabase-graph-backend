@@ -74,7 +74,7 @@ type Profile {
   favorite: [String!]
   twitterId: String
   img: String
-  username: String
+  username: String!
 }
 
 type UserCount {
@@ -101,9 +101,9 @@ type Query {
   user(userInput: UserInput!): User!
   posts: [Post!]!
   post(id: String!): Post!
-  postsByUserId(userId: String!): [Post!]!
-  keepPosts(userId: String!): [Post!]!
-  followAndSelfPosts(userId: String!): [Post!]!
+  postsByUserId: [Post!]!
+  keepPosts: [Post!]!
+  followAndSelfPosts: [Post!]!
   comments(postId: String!): [Comment!]!
   profile(userId: String!): Profile!
 }
@@ -160,7 +160,6 @@ input UpdatePostInput {
 }
 
 input PostUpdatekeepedInput {
-  userId: ID!
   postId: String!
 }
 
@@ -193,7 +192,6 @@ input CreateProfileInput {
   favorite: ProfileCreatefavoriteInput
   twitterId: String
   img: String
-  username: String
 }
 
 input ProfileCreatefavoriteInput {

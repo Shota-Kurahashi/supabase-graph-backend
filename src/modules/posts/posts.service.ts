@@ -128,7 +128,7 @@ export class PostsService {
     });
   }
 
-  async keep(postUpdatekeepedInput: PostUpdatekeepedInput) {
+  async keep(userId: string, postUpdatekeepedInput: PostUpdatekeepedInput) {
     const post = await this.prisma.post.findUnique({
       where: {
         id: postUpdatekeepedInput.postId,
@@ -139,16 +139,14 @@ export class PostsService {
       throw new ForbiddenException('投稿が見つかりません');
     }
     //すでに登録済みだったら削除
-    if (post.keeped?.includes(postUpdatekeepedInput.userId)) {
+    if (post.keeped?.includes(userId)) {
       const removeKeepPost = this.prisma.post.update({
         where: {
           id: postUpdatekeepedInput.postId,
         },
         data: {
           keeped: {
-            set: post.keeped.filter(
-              (userId) => userId !== postUpdatekeepedInput.userId,
-            ),
+            set: post.keeped.filter((userId) => userId !== userId),
           },
         },
         include: {
@@ -167,7 +165,7 @@ export class PostsService {
       },
       data: {
         keeped: {
-          push: postUpdatekeepedInput.userId,
+          push: userId,
         },
       },
       include: {

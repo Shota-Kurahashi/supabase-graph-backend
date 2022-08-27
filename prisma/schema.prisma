@@ -37,7 +37,7 @@ model Profile {
   favorite String[]
   twitterId String?
   img String?
-  username String?
+  username String @unique @default(uuid())
 }
 
 model Post {

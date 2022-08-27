@@ -29,6 +29,6 @@ export class Profile {
   @Field(() => String, { nullable: true })
   img!: string | null;
 
-  @Field(() => String, { nullable: true })
-  username!: string | null;
+  @Field(() => String, { nullable: false })
+  username!: string;
 }

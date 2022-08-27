@@ -1,11 +1,13 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Context } from '@nestjs/graphql';
 import { PostsService } from './posts.service';
 import { Post } from './entities/post.entity';
 import { CreatePostInput } from './dto/create-post.input';
 import { UpdatePostInput } from './dto/update-post.input';
 import { PostUpdatekeepedInput } from './dto/post-updatekeeped.input';
 import { UseGuards } from '@nestjs/common';
-import { GqlAuthGuard } from '../auth/strategy/gql-auth-guard';
+import { GqlAuthGuard } from '../auth/guard/gql-auth.guard';
+import { SupabaseAuthUser } from 'nestjs-supabase-auth';
+import { CurrentUser } from '../auth/decorator/user.decorator';
 @Resolver(() => Post)
 export class PostsResolver {
   constructor(private readonly postsService: PostsService) {}
@@ -16,7 +18,6 @@ export class PostsResolver {
   }
 
   @Query(() => [Post], { name: 'posts' })
-  @UseGuards(GqlAuthGuard)
   findAll() {
     return this.postsService.findAll();
   }
@@ -27,20 +28,21 @@ export class PostsResolver {
   }
 
   @Query(() => [Post], { name: 'postsByUserId' })
-  findUserPosts(@Args('userId', { type: () => String }) userId: string) {
-    return this.postsService.findUserPosts(userId);
+  @UseGuards(GqlAuthGuard)
+  findUserPosts(@CurrentUser() user: SupabaseAuthUser) {
+    return this.postsService.findUserPosts(user.id);
   }
 
   @Query(() => [Post], { name: 'keepPosts' })
-  findKeepPosts(@Args('userId', { type: () => String }) userId: string) {
-    return this.postsService.findKeepPosts(userId);
+  @UseGuards(GqlAuthGuard)
+  findKeepPosts(@CurrentUser() user: SupabaseAuthUser) {
+    return this.postsService.findKeepPosts(user.id);
   }
 
   @Query(() => [Post], { name: 'followAndSelfPosts' })
-  findFollowAndSelfPosts(
-    @Args('userId', { type: () => String }) userId: string,
-  ) {
-    return this.postsService.findFollowAndSelfPosts(userId);
+  @UseGuards(GqlAuthGuard)
+  findFollowAndSelfPosts(@CurrentUser() user: SupabaseAuthUser) {
+    return this.postsService.findFollowAndSelfPosts(user.id);
   }
   @Mutation(() => Post)
   updatePost(@Args('updatePostInput') updatePostInput: UpdatePostInput) {
@@ -52,11 +54,13 @@ export class PostsResolver {
   }
 
   @Mutation(() => Post, { name: 'keep' })
+  @UseGuards(GqlAuthGuard)
   addKeepPost(
+    @CurrentUser() user: SupabaseAuthUser,
     @Args('postUpdatekeepedInput')
     postUpdatekeepedInput: PostUpdatekeepedInput,
   ) {
-    return this.postsService.keep(postUpdatekeepedInput);
+    return this.postsService.keep(user.id, postUpdatekeepedInput);
   }
 
   @Mutation(() => Post)

@@ -14,7 +14,6 @@ export class SupabaseStrategy extends PassportStrategy(
     private readonly config: ConfigService,
     private readonly prisma: PrismaService,
   ) {
-    console.log('aa');
     super({
       supabaseUrl: config.get('SUPABASE_URL'),
       supabaseKey: config.get('SUPABASE_ANON_KEY'),
@@ -42,7 +41,6 @@ export class SupabaseStrategy extends PassportStrategy(
 
     delete user.createdAt;
     delete user.updatedAt;
-    console.log(user);
     return user;
   }
 }

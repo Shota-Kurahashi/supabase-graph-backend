@@ -20,8 +20,4 @@ export class CreateProfileInput {
   @IsOptional()
   @IsUrl()
   img?: string;
-
-  @Field(() => String, { nullable: true })
-  @IsOptional()
-  username?: string;
 }
