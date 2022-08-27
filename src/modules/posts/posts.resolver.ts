@@ -4,7 +4,8 @@ import { Post } from './entities/post.entity';
 import { CreatePostInput } from './dto/create-post.input';
 import { UpdatePostInput } from './dto/update-post.input';
 import { PostUpdatekeepedInput } from './dto/post-updatekeeped.input';
-
+import { UseGuards } from '@nestjs/common';
+import { GqlAuthGuard } from '../auth/strategy/gql-auth-guard';
 @Resolver(() => Post)
 export class PostsResolver {
   constructor(private readonly postsService: PostsService) {}
@@ -15,6 +16,7 @@ export class PostsResolver {
   }
 
   @Query(() => [Post], { name: 'posts' })
+  @UseGuards(GqlAuthGuard)
   findAll() {
     return this.postsService.findAll();
   }
