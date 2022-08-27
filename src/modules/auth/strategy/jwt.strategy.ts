@@ -41,7 +41,6 @@ export class SupabaseStrategy extends PassportStrategy(
 
     delete user.createdAt;
     delete user.updatedAt;
-    console.log(user);
     return user;
   }
 }
