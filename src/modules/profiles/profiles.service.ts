@@ -20,12 +20,6 @@ export class ProfilesService {
     });
   }
 
-  findOneByUserName(userName: string) {
-    return this.prisma.profile.findUnique({
-      where: { username: userName },
-    });
-  }
-
   async update(userId: string, updateProfileInput: UpdateProfileInput) {
     const profile = await this.prisma.profile.findUnique({
       where: { userId },
