@@ -106,6 +106,7 @@ type Query {
   followAndSelfPosts: [Post!]!
   comments(postId: String!): [Comment!]!
   profile(userId: String!): Profile!
+  profileByUserName(userName: String!): Profile!
 }
 
 input UserInput {

@@ -20,6 +20,13 @@ export class ProfilesResolver {
     return this.profilesService.findOne(userId);
   }
 
+  @Query(() => Profile, { name: 'profileByUserName' })
+  findOneByUserName(
+    @Args('userName', { type: () => String }) userName: string,
+  ) {
+    return this.profilesService.findOneByUserName(userName);
+  }
+
   @Mutation(() => Profile)
   updateProfile(
     @Args('updateProfileInput') updateProfileInput: UpdateProfileInput,
