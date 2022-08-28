@@ -2,7 +2,11 @@ import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
 import { UserUpdatefollowInput } from './dto/user-updatefollow.input';
+import { CurrentUser } from '../auth/decorator/user.decorator';
+import { SupabaseAuthUser } from 'nestjs-supabase-auth';
 import { UserInput } from './dto/user-InputUserId.input';
+import { GqlAuthGuard } from '../auth/guard/gql-auth.guard';
+import { UseGuards } from '@nestjs/common';
 
 @Resolver(() => User)
 export class UsersResolver {
@@ -19,13 +23,15 @@ export class UsersResolver {
   }
 
   @Query(() => User, { name: 'user' })
-  findOne(@Args('userInput') userInput: UserInput) {
-    return this.usersService.findOne(userInput.userId);
+  @UseGuards(GqlAuthGuard)
+  findOne(@CurrentUser() user: SupabaseAuthUser) {
+    return this.usersService.findOne(user.id);
   }
 
   @Mutation(() => User)
-  removeUser(@Args('userInput') userInput: UserInput) {
-    return this.usersService.remove(userInput.userId);
+  @UseGuards(GqlAuthGuard)
+  removeUser(@CurrentUser() user: SupabaseAuthUser) {
+    return this.usersService.remove(user.id);
   }
 
   @Mutation(() => User, { name: 'follow' })
