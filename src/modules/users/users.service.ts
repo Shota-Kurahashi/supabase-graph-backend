@@ -1,11 +1,15 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { ProfilesService } from '../profiles/profiles.service';
 import { UserUpdatefollowInput } from './dto/user-updatefollow.input';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly profilesService: ProfilesService,
+  ) {}
 
   async create(id: string) {
     try {
@@ -14,6 +18,9 @@ export class UsersService {
           id,
         },
       });
+
+      await this.profilesService.create({ userId: user.id });
+
       return user;
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
